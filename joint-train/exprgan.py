@@ -77,7 +77,7 @@ class ExprGAN(object):
             self.conv5_2_coeff = 1
 
 
-        print "\n\tLoading data"
+        print("\n\tLoading data")
         self.data_X, self.data_y = self.load_anno('../split/' + self.dataset_name.lower() + '_anno.pickle')
         self.data_X = [os.path.join("../data", self.dataset_name, x) for x in self.data_X]
 
@@ -105,7 +105,7 @@ class ExprGAN(object):
             tf.float32,
             [self.size_batch, self.y_dim * self.rb_dim],
             name='rb')
-        print '\n\tBuilding graph ...'
+        print('\n\tBuilding graph ...')
         self.z = self.encoder(
             image=self.input_image
         )
@@ -232,14 +232,14 @@ class ExprGAN(object):
 
         size_data = len(self.data_X)
         if self.is_stage_one:
-            print '\n\tStage One'
-            print '\n\tVGG_coeff: %f' % self.vgg_coeff
+            print('\n\tStage One')
+            print('\n\tVGG_coeff: %f',self.vgg_coeff)
             self.loss_EG = self.EG_loss + self.vgg_coeff * self.vgg_loss + self.fm_coeff * self.fm_loss + \
                            0.000 * self.G_img_loss + 0.000 * self.E_z_loss + 0.000 * self.tv_loss + \
                            self.q_coeff * self.D_cont_loss_fake  # slightly increase the params
         else:
-            print '\n\tStage Two'
-            print '\n\tVGG_coeff: %f' % self.vgg_coeff
+            print('\n\tStage Two')
+            print('\n\tVGG_coeff: %f',self.vgg_coeff)
             self.loss_EG = self.EG_loss + self.vgg_coeff * self.vgg_loss + self.fm_coeff * self.fm_loss + \
                            0.01 * self.G_img_loss + 0.01 * self.E_z_loss + 0.001 * self.tv_loss + \
                             self.q_coeff * self.D_cont_loss_fake  # slightly increase the params
@@ -311,7 +311,7 @@ class ExprGAN(object):
         for i in range(self.size_batch):
             sample_label_rb[i] = self.y_to_rb_label(sample_label_emo[i])
 
-        print '\n\tPreparing for training ...'
+        print('\n\tPreparing for training ...')
         tf.global_variables_initializer().run()
 
         if use_trained_model:
@@ -607,7 +607,7 @@ class ExprGAN(object):
     def load_checkpoint(self):
         print("\n\tLoading pre-trained model ...")
         checkpoint_dir = os.path.join(self.checkpoint_dir, 'checkpoint')
-        print checkpoint_dir
+        print(checkpoint_dir)
         checkpoints = tf.train.get_checkpoint_state(checkpoint_dir)
         if checkpoints and checkpoints.model_checkpoint_path:
             checkpoints_name = os.path.basename(checkpoints.model_checkpoint_path)
@@ -697,10 +697,10 @@ class ExprGAN(object):
             np.random.seed(random_seed)
             file_names = self.data_X[num_samples:2*num_samples]
         if len(file_names) < num_samples:
-            print 'The number of testing images must be larger than %d' % num_samples
+            print('The number of testing images must be larger than %d',num_samples)
             exit(0)
         sample_files = file_names[0:num_samples]
-        print sample_files
+        print(sample_files)
         sample = [load_image(
             image_path=sample_file,
             image_size=self.size_image,
@@ -712,7 +712,7 @@ class ExprGAN(object):
             images = np.array(sample).astype(np.float32)[:, :, :, None]
         else:
             images = np.array(sample).astype(np.float32)
-        print images.shape
+        print(images.shape)
 
         self.test(images, name='test.png')
 
@@ -724,7 +724,7 @@ class ExprGAN(object):
         return net['conv1_2'], net['conv2_2'], net['conv3_2'], net['conv4_2'], net['conv5_2']
 
     def load_anno(self, anno_file):
-        print "\n\tLoading anno"
+        print("\n\tLoading anno")
         anno = pickle.load(open(anno_file, 'rb'))
         if self.is_training:
             anno = anno['train']
