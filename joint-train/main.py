@@ -41,13 +41,13 @@ def main(_):
             fm_coeff=FLAGS.fm_coeff
         )
         if FLAGS.is_train:
-            print '\n\tTraining Mode'
+            print("\n\tTraining Mode")
             model.train(
                 num_epochs=FLAGS.epoch,  # number of epochs
             )
         else:
             seed = 2018
-            print '\n\tTesting Mode'
+            print("\n\tTesting Mode")
             model.custom_test(
                 testing_samples_dir=None, random_seed=seed
             )
